@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 
@@ -7,14 +8,14 @@ namespace TabloidMVC.Repositories
     public class CategoryRepository : BaseRepository, ICategoryRepository
     {
         public CategoryRepository(IConfiguration config) : base(config) { }
-        public List<Category> GetAll()
+        public List<Category> GetAllCategories()
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT id, name FROM Category";
+                    cmd.CommandText = "SELECT id, name FROM Category WHERE IsDeleted = 0  ORDER BY [Name]";
                     var reader = cmd.ExecuteReader();
 
                     var categories = new List<Category>();
@@ -34,5 +35,105 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
+        public void AddCategory(Category category)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO Category (
+                            Name )
+                        OUTPUT INSERTED.ID
+                        VALUES (
+                            @Name )";
+                    cmd.Parameters.AddWithValue("@Name", category.Name);
+                   
+
+                    category.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
+        public void DeleteCategory(int categoryId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            UPDATE Category SET IsDeleted = 1
+                            WHERE Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", categoryId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public Category GetCategoryById(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT Id, [Name]
+                        FROM Category
+                        WHERE Id = @id AND IsDeleted = 0";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        Category category = new Category()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name"))
+                        };
+
+                        reader.Close();
+                        return category;
+                    }
+
+                    reader.Close();
+                    return null;
+                }
+            }
+        }
+
+        public void EditCategory(Category category)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    UPDATE Category
+                    SET Name = @name
+                    WHERE id = @id
+                ";
+
+                    cmd.Parameters.AddWithValue("@name", category.Name);
+                    cmd.Parameters.AddWithValue("@id", category.Id);
+
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
     }
 }
