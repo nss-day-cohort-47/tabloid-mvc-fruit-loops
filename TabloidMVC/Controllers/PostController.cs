@@ -119,7 +119,7 @@ namespace TabloidMVC.Controllers
 
             var vm = new PostCreateViewModel();
             vm.Post = post;
-            vm.CategoryOptions = _categoryRepository.GetAll();
+            vm.CategoryOptions = _categoryRepository.GetAllCategories();
             return View(vm);
         }
         // POST: OwnerController/Edit/5
