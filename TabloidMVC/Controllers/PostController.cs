@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System.Security.Claims;
+using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
@@ -26,6 +27,13 @@ namespace TabloidMVC.Controllers
             return View(posts);
         }
 
+        public IActionResult MyPost()
+        {
+            int userId = GetCurrentUserProfileId();
+            var posts = _postRepository.GetAllPostsByUser(userId);
+            return View(posts);
+        }
+
         public IActionResult Details(int id)
         {
             var post = _postRepository.GetPublishedPostById(id);
@@ -39,6 +47,36 @@ namespace TabloidMVC.Controllers
                 }
             }
             return View(post);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            int userId = GetCurrentUserProfileId();
+            var post = _postRepository.GetPublishedPostById(id);
+            if (userId == post.UserProfileId)
+            {
+                return View(post);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        // POST: DogController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, Post post)
+        {
+            try
+            {
+                _postRepository.Delete(id);
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View(post);
+            }
         }
 
         public IActionResult Create()
