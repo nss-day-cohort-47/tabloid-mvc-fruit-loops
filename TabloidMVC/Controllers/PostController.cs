@@ -126,17 +126,17 @@ namespace TabloidMVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public IActionResult Edit(int id, Post post)
+        public IActionResult Edit(int id, PostCreateViewModel vm)
         {
             try
             {
-                _postRepository.Update(post);
+                _postRepository.Update(vm.Post);
 
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                return View(post);
+                return RedirectToAction("Index");
             }
         }
 
