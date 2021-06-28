@@ -8,5 +8,9 @@ namespace TabloidMVC.Repositories
         List<Category> GetAllCategories();
 
         void AddCategory(Category category);
+
+        void DeleteCategory(int categoryId);
+
+        Category GetCategoryById(int id);
     }
 }
