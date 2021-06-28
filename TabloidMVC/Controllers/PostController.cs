@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
+using System.Collections.Generic;
 using System.Security.Claims;
+using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
@@ -13,11 +15,13 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICommentsRepository _commentsRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentsRepository commentsRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _commentsRepository = commentsRepository;
         }
 
         public IActionResult Index()
@@ -72,6 +76,12 @@ namespace TabloidMVC.Controllers
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(id);
+        }
+
+        public IActionResult GetComments(int id) {
+            List<Comments> Comments = _commentsRepository.GetAllComments();
+            return View(Comments);
+            
         }
     }
 }

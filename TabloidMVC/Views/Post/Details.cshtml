@@ -22,6 +22,10 @@
                 <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fas fa-trash"></i>
                 </a>
+                @* word before controller. *@
+                <a asp-controller="Comments" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Comments">
+                    Comments
+                </a>
             </div>
         </section>
         <hr />

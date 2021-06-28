@@ -14,14 +14,14 @@ namespace TabloidMVC.Controllers
         // GET: CommentsController
         private readonly ICommentsRepository _commentsRepository;
 
-        public CommentsController(CommentsRepository commentsRepository)
+        public CommentsController(ICommentsRepository commentsRepository)
         {
             _commentsRepository = commentsRepository;
         }
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
-                List<Comments> comments = _commentsRepository.GetAllComments();
-                return View(comments);
+            List<Comments> comments = _commentsRepository.GetAllPostCommentsById(id);
+            return View(comments);
  
         }
 
