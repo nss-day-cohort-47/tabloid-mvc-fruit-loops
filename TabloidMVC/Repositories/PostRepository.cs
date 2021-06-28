@@ -254,7 +254,7 @@ namespace TabloidMVC.Repositories
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
                         WHERE IsApproved = 1 AND PublishDateTime < SYSDATETIME()
                               and p.UserProfileId = @userProfileId
-                              and IsDeleted = 0";
+                              and p.IsDeleted = 0";
                     cmd.Parameters.AddWithValue("userProfileId", userProfileId);
                     var reader = cmd.ExecuteReader();
 
