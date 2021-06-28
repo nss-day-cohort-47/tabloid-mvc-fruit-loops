@@ -106,11 +106,11 @@ namespace TabloidMVC.Controllers
                 return View(vm);
             }
         }
-
+        
         // GET: OwnerController/Edit/5
-        public IActionResult Edit(int postId)
+        public IActionResult Edit(int id)
         {
-            var post = _postRepository.GetPublishedPostById(postId+1);
+            var post = _postRepository.GetPublishedPostById(id);
 
             if (post == null)
             {
