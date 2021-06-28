@@ -11,6 +11,7 @@ namespace TabloidMVC.Repositories
 {
     public class PostRepository : BaseRepository, IPostRepository
     {
+        private readonly CommentsRepository commentsRepository;
         public PostRepository(IConfiguration config) : base(config) { }
         public List<Post> GetAllPublishedPosts()
         {
