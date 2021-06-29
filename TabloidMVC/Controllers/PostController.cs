@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
@@ -16,12 +17,14 @@ namespace TabloidMVC.Controllers
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICommentsRepository _commentsRepository;
+        private readonly ITagRepository _tagRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentsRepository commentsRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentsRepository commentsRepository, ITagRepository tagRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
             _commentsRepository = commentsRepository;
+            _tagRepository = tagRepository;
         }
 
         public IActionResult Index()
@@ -39,7 +42,7 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
-            var post = _postRepository.GetPublishedPostById(id);
+            var post = _postRepository.GetPublishedPostById(id, GetCurrentUserProfileId());
             if (post == null)
             {
                 int userId = GetCurrentUserProfileId();
@@ -55,7 +58,7 @@ namespace TabloidMVC.Controllers
         public ActionResult Delete(int id)
         {
             int userId = GetCurrentUserProfileId();
-            var post = _postRepository.GetPublishedPostById(id);
+            var post = _postRepository.GetPublishedPostById(id, GetCurrentUserProfileId());
             if (userId == post.UserProfileId)
             {
                 return View(post);
@@ -89,6 +92,41 @@ namespace TabloidMVC.Controllers
             return View(vm);
         }
 
+        public IActionResult ManageTags(int id)
+        {
+            PostManageTagsViewModel vm = _postRepository.GetUserPostByIdAndTags(id);
+            vm.PostTags = _tagRepository.GetAllByPost(id);
+            return View(vm);
+        }
+
+        public IActionResult AddPostTag(int postId)
+        {
+            List<Tag> tags = _tagRepository.GetAll();
+            PostManageTagsViewModel vm = new();
+            vm.PostId = postId;
+            vm.PostTags = tags;
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult AddPostTag(PostManageTagsViewModel vm)
+        {
+            try
+            {
+                _tagRepository.AddPostTag(vm.TagId, vm.PostId);
+                return RedirectToAction("ManageTags", new { id = vm.PostId});
+            }
+            catch
+            {
+                return RedirectToAction("ManageTags", new { id = vm.PostId });
+            }
+        }
+        public IActionResult DeletePostTag(int Id, int PostId)
+        {
+            _tagRepository.DeletePostTag(Id, PostId);
+            return RedirectToAction("ManageTags", new { id = PostId });
+        }
+
         [HttpPost]
         public IActionResult Create(PostCreateViewModel vm)
         {
@@ -112,7 +150,7 @@ namespace TabloidMVC.Controllers
         // GET: OwnerController/Edit/5
         public IActionResult Edit(int id)
         {
-            var post = _postRepository.GetPublishedPostById(id);
+            var post = _postRepository.GetPublishedPostById(id, GetCurrentUserProfileId());
 
             if (post == null)
             {

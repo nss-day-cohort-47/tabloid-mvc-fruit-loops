@@ -32,6 +32,8 @@ namespace TabloidMVC.Models
 
         [DisplayName("Author")]
         public int UserProfileId { get; set; }
+
+        public bool isOwner { get; set; }
         public UserProfile UserProfile { get; set; }
     }
 }

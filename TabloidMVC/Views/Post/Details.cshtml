@@ -19,6 +19,13 @@
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Edit">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
+                @if (Model.isOwner)
+                {
+                    <a asp-action="ManageTags" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Manage Tags">
+                        <i class="fas fa-tag"></i>
+                    </a>
+                }
+
                 <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fas fa-trash"></i>
                 </a>
