@@ -33,7 +33,7 @@ namespace TabloidMVC.Repositories
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("id")),
                             Subject = reader.GetString(reader.GetOrdinal("subject")),
-                            Conent = reader.GetString(reader.GetOrdinal("content")),
+                            Content = reader.GetString(reader.GetOrdinal("content")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                             UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
                             Post = reader.GetInt32(reader.GetOrdinal("PostId")),
@@ -55,7 +55,7 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT id, subject, content, CreateDateTime, UserProfileId, PostId
+                    cmd.CommandText = @"SELECT id, subject, content, CreateDateTime, UserProfileId, PostId, isdeleted
                                         FROM Comment
                                         WHERE id = @id;";
                     cmd.Parameters.AddWithValue("@id", id);
@@ -67,13 +67,17 @@ namespace TabloidMVC.Repositories
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("id")),
                             Subject = reader.GetString(reader.GetOrdinal("subject")),
-                            Conent = reader.GetString(reader.GetOrdinal("content")),
+                            Content = reader.GetString(reader.GetOrdinal("content")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                             UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
                             Post = reader.GetInt32(reader.GetOrdinal("PostId")),
                         };
-                        comments.Add(comment);
-                        
+                        if (!reader.GetBoolean(reader.GetOrdinal("isDeleted")))
+                        {
+
+                            comments.Add(comment);
+                        }
+
                     }
                     reader.Close();
                     return comments;
@@ -101,16 +105,35 @@ namespace TabloidMVC.Repositories
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("id")),
                             Subject = reader.GetString(reader.GetOrdinal("subject")),
-                            Conent = reader.GetString(reader.GetOrdinal("content")),
+                            Content = reader.GetString(reader.GetOrdinal("content")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                             UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
                             Post = reader.GetInt32(reader.GetOrdinal("PostId")),
                         };
+
                     }
                     reader.Close();
                     return comment;
+
                 }
             }
+        }
+        public void Update(Comments comments)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"Update Comment set Subject = @subject, Content = @content
+                                        where id = @id;";
+                    cmd.Parameters.AddWithValue("@subject", comments.Subject);
+                    cmd.Parameters.AddWithValue("@content", comments.Content);
+                    cmd.Parameters.AddWithValue("@id", comments.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
         }
 
         public void DeleteComment(int commentId)
@@ -133,5 +156,5 @@ namespace TabloidMVC.Repositories
             }
         }
 
-    }
+    }//EOC
 }

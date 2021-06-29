@@ -22,7 +22,7 @@ namespace TabloidMVC.Controllers
         {
             List<Comments> comments = _commentsRepository.GetAllPostCommentsById(id);
             return View(comments);
- 
+
         }
 
         // GET: CommentsController/Details/5
@@ -55,21 +55,27 @@ namespace TabloidMVC.Controllers
         // GET: CommentsController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Comments comments = _commentsRepository.GetCommentById(id);
+            if (comments == null)
+            {
+                return NotFound();
+            }
+            return View(comments);
         }
 
         // POST: CommentsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Comments comments)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _commentsRepository.Update(comments);
+                return RedirectToAction("Index", "Comments", new { id} );
             }
             catch
             {
-                return View();
+                return View(comments);
             }
         }
 
