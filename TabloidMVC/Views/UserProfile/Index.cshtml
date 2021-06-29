@@ -73,9 +73,16 @@
                 @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
-                @Html.ActionLink("Details", "Details", new {  id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new {  id=item.Id  })
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @if (item.IsDeleted == false)
+                {
+                    @Html.ActionLink("Deactivate", "Deactivate", new { id = item.Id })
+                }
+                else
+                {
+                    @Html.ActionLink("Reactivate", "Reactivate", new { id = item.Id })
+                }
             </td>
         </tr>
 }
