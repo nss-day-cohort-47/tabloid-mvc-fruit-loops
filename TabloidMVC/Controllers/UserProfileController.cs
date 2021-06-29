@@ -89,11 +89,31 @@ namespace TabloidMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Deactivate(int id, UserProfile user)
         {
-            int admin = _userProfileRepository.CheckforAdmin();
 
-            if (admin > 1)
+            if (user.UserTypeId == 1)
             {
 
+                int admin = _userProfileRepository.CheckforAdmin();
+                if (admin > 1)
+                {
+
+                    try
+                    {
+                        _userProfileRepository.Delete(id);
+                        return RedirectToAction("Index");
+                    }
+                    catch
+                    {
+                        return View(user);
+                    }
+                }
+                else
+                {
+                    return Content("<script language='javascript' type='text/javascript'>alert('You cannot delete the only admin!');</script>");
+                }
+            }
+            else
+            {
                 try
                 {
                     _userProfileRepository.Delete(id);
@@ -103,10 +123,6 @@ namespace TabloidMVC.Controllers
                 {
                     return View(user);
                 }
-            }
-            else
-            {
-                return Content("<script language='javascript' type='text/javascript'>alert('You cannot delete the only admin!');</script>");
             }
         }
 
