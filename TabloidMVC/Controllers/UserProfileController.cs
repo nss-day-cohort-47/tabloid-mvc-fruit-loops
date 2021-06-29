@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TabloidMVC.Models;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -77,23 +78,73 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: UserProfile/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Deactivate(int id)
         {
-            return View();
+            var user = _userProfileRepository.GetById(id);
+            return View(user);
         }
 
-        // POST: UserProfile/Delete/5
+        // POST: DogController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Deactivate(int id, UserProfile user)
+        {
+
+            if (user.UserTypeId == 1)
+            {
+
+                int admin = _userProfileRepository.CheckforAdmin();
+                if (admin > 1)
+                {
+
+                    try
+                    {
+                        _userProfileRepository.Delete(id);
+                        return RedirectToAction("Index");
+                    }
+                    catch
+                    {
+                        return View(user);
+                    }
+                }
+                else
+                {
+                    return Content("<script language='javascript' type='text/javascript'>alert('You cannot delete the only admin!');</script>");
+                }
+            }
+            else
+            {
+                try
+                {
+                    _userProfileRepository.Delete(id);
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    return View(user);
+                }
+            }
+        }
+
+        public IActionResult Reactivate(int id)
+        {
+            var user = _userProfileRepository.GetById(id);
+            return View(user);
+        }
+
+        // POST: DogController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Reactivate(int id, UserProfile user)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _userProfileRepository.Reactivate(id);
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View(user);
             }
         }
     }

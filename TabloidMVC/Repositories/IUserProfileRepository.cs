@@ -12,5 +12,10 @@ namespace TabloidMVC.Repositories
         List<UserProfile> GetAllUserProfiles();
         public UserProfile GetById(int id);
 
+        public void Delete(int id);
+
+        public void Reactivate(int id);
+
+        public int CheckforAdmin();
     }
 }

@@ -12,6 +12,7 @@ namespace TabloidMVC.Models
         public string DisplayName { get; set; }
         public string Email { get; set; }
         public DateTime CreateDateTime { get; set; }
+        public bool IsDeleted { get; set; }
         public string ImageLocation { get; set; }
         public int UserTypeId { get; set; }
         public UserType UserType { get; set; }
