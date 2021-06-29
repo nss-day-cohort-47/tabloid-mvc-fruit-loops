@@ -16,12 +16,14 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICommentsRepository _commentsRepository;
         private readonly ITagRepository _tagRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ITagRepository tagRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentsRepository commentsRepository, ITagRepository tagRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _commentsRepository = commentsRepository;
             _tagRepository = tagRepository;
         }
 
@@ -144,7 +146,7 @@ namespace TabloidMVC.Controllers
                 return View(vm);
             }
         }
-        
+
         // GET: OwnerController/Edit/5
         public IActionResult Edit(int id)
         {
@@ -184,5 +186,6 @@ namespace TabloidMVC.Controllers
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(id);
         }
+
     }
 }
