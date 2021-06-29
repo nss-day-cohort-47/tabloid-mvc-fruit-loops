@@ -84,7 +84,54 @@ namespace TabloidMVC.Repositories
 
         public Comments GetCommentById(int id)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT id, subject, content, CreateDateTime, UserProfileId, PostId
+                                        FROM Comment
+                                        WHERE id = @id;";
+                    cmd.Parameters.AddWithValue("@id", id);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    Comments comment = null;
+                    while (reader.Read())
+                    {
+                        comment = new Comments()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("id")),
+                            Subject = reader.GetString(reader.GetOrdinal("subject")),
+                            Conent = reader.GetString(reader.GetOrdinal("content")),
+                            CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                            UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                            Post = reader.GetInt32(reader.GetOrdinal("PostId")),
+                        };
+                    }
+                    reader.Close();
+                    return comment;
+                }
+            }
         }
+
+        public void DeleteComment(int commentId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            UPDATE Comment SET IsDeleted = 1
+                            WHERE Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", commentId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
     }
 }
