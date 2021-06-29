@@ -55,7 +55,8 @@ namespace TabloidMVC.Controllers
         // GET: CommentsController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            
+            return View(_commentsRepository.GetCommentById(id));
         }
 
         // POST: CommentsController/Edit/5
