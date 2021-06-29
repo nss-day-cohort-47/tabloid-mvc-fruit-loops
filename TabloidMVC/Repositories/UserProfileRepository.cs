@@ -73,7 +73,9 @@ namespace TabloidMVC.Repositories
                        SELECT up.FirstName, up.LastName, up.DisplayName, ut.Name, up.Id
                          FROM UserProfile up 
                         LEFT JOIN UserType ut ON up.UserTypeId = ut.Id
-                        WHERE up.IsDeleted = 0";
+                        WHERE up.IsDeleted = 0
+                        ORDER BY up.DisplayName
+                            ";
                     var reader = cmd.ExecuteReader();
 
                     var userProfiles = new List<UserProfile>();
