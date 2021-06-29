@@ -33,10 +33,10 @@
                     </td>
 
                     <td>
-                        <a class="btn btn-outline-primary mx-1" title="Edit">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Edit">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Delete">
+                        <a class="btn btn-outline-primary mx-1" title="Delete">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>
