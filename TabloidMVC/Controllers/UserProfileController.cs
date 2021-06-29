@@ -30,7 +30,8 @@ namespace TabloidMVC.Controllers
         // GET: UserProfile/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var userProfiles = _userProfileRepository.GetById(id);
+            return View(userProfiles);
         }
 
         // GET: UserProfile/Create

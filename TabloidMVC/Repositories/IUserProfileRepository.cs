@@ -10,6 +10,7 @@ namespace TabloidMVC.Repositories
         public UserProfile Add(UserProfile user);
 
         List<UserProfile> GetAllUserProfiles();
+        public UserProfile GetById(int id);
 
     }
 }
