@@ -5,6 +5,7 @@ using System.Reflection.PortableExecutable;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Utils;
 
 namespace TabloidMVC.Repositories
@@ -51,7 +52,7 @@ namespace TabloidMVC.Repositories
             }
         }
 
-        public Post GetPublishedPostById(int id)
+        public Post GetPublishedPostById(int id, int currentUser)
         {
             using (var conn = Connection)
             {
@@ -84,7 +85,7 @@ namespace TabloidMVC.Repositories
                     {
                         post = NewPostFromReader(reader);
                     }
-
+                    if (currentUser == post.UserProfileId) post.isOwner = true;
                     reader.Close();
 
                     return post;
@@ -125,7 +126,7 @@ namespace TabloidMVC.Repositories
                     {
                         post = NewPostFromReader(reader);
                     }
-
+                    post.isOwner = true;
                     reader.Close();
 
                     return post;
@@ -133,6 +134,44 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        public PostManageTagsViewModel GetUserPostByIdAndTags(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                       SELECT p.Id as PostId, p.Title, p.Content, T.Id as TagId, T.Name
+                         FROM Post p 
+                         LEFT JOIN PostTag pt on pt.PostId = p.Id
+                         LEFT JOIN Tag T on pt.TagId = T.Id    
+                        WHERE p.id = @id";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+                    var reader = cmd.ExecuteReader();
+                    List<PostManageTagsViewModel> retValue = new();
+                    PostManageTagsViewModel post = null;
+                    Tag tag = null;
+                    if (reader.Read())
+                    {
+                        if(post == null)
+                        {
+                            post = new PostManageTagsViewModel
+                            {
+                                PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
+                                Title = reader.GetString(reader.GetOrdinal("Title")),
+                                Content = reader.GetString(reader.GetOrdinal("Content")),  
+                                PostTags = new List<Tag>()
+                            };
+                        }
+                        reader.Close();
+                        return post;
+                    }
+                    return post;
+                }
+            }
+        }
 
         public void Add(Post post)
         {
