@@ -27,7 +27,7 @@ namespace TabloidMVC.Repositories
                                         FROM Comment;";
                     SqlDataReader reader = cmd.ExecuteReader();
                     List<Comments> comments = new List<Comments>() { };
-                    while (reader.Read())
+                    while (reader.Read() && reader.IsDBNull(reader.GetOrdinal("id")))
                     {
                         Comments comment = new Comments()
                         {
