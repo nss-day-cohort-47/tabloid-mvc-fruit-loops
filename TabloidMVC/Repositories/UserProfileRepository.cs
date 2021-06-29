@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
 
@@ -50,6 +51,37 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return userProfile;
+                }
+            }
+        }
+
+        public UserProfile Add(UserProfile user)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO Userprofile (
+                            FirstName, LastName, DisplayName, Email, CreateDateTime,
+                            UserTypeId )
+                        OUTPUT INSERTED.ID
+                        VALUES (
+                            @FirstName, @LastName, @DisplayName, @Email, @CreateDateTime,
+                            @UserTypeId)";
+                    
+                    cmd.Parameters.AddWithValue("@FirstName", user.FirstName);
+                    cmd.Parameters.AddWithValue("@LastName", user.LastName);
+            
+                    cmd.Parameters.AddWithValue("@DisplayName", user.DisplayName );
+                    cmd.Parameters.AddWithValue("@Email", user.Email);
+                    cmd.Parameters.AddWithValue("@UserTypeId", 2);
+                    cmd.Parameters.AddWithValue("@CreateDateTime", DateTime.Now);
+                    
+
+                    user.Id = (int)cmd.ExecuteScalar();
+                    return user;
                 }
             }
         }
