@@ -4,7 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="container pt-5">
+<h1>Comments</h1>
 
 <p>
     <a asp-action="Create" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Create New</a>
@@ -12,13 +13,6 @@
 <table class="table">
     <thead>
         <tr>
-
-            <th>
-                @Html.DisplayNameFor(model => model.comment.PostId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.comment.UserProfileId)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.comment.Subject)
             </th>
@@ -35,10 +29,6 @@
         @foreach (var item in Model.Comments)
         {
             <tr>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserProfileId)
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Subject)
                 </td>
@@ -56,3 +46,7 @@
         }
     </tbody>
 </table>
+<p>
+    <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Back</a>
+</p>
+</div>

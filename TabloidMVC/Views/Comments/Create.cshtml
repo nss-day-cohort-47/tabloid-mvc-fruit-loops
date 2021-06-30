@@ -4,6 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
+<div class="container pt-5"
 <h1>Create</h1>
 
 <h4>Comment</h4>
@@ -47,13 +48,13 @@
 
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+            <div>
+                <a asp-action="Index" asp-route-id="@Model.Post.Id">Back to List</a>
+            </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
