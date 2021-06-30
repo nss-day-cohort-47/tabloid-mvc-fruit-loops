@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -15,15 +17,24 @@ namespace TabloidMVC.Controllers
     {
         // GET: CommentsController
         private readonly ICommentsRepository _commentsRepository;
-
-        public CommentsController(ICommentsRepository commentsRepository)
+        private readonly IPostRepository _postRepository;
+        public CommentsController(ICommentsRepository commentsRepository, IPostRepository postRepository)
         {
             _commentsRepository = commentsRepository;
+            _postRepository = postRepository;
         }
         public ActionResult Index(int id)
         {
-            List<Comments> comments = _commentsRepository.GetAllPostCommentsById(id);
-            return View(comments);
+            PostCommentsViewModel vm = new PostCommentsViewModel()
+            {
+                Comments = _commentsRepository.GetAllPostCommentsById(id),
+                Post = new Post() {
+                    Id = id,
+                }
+
+            };
+
+            return View(vm);
 
         }
 
@@ -33,25 +44,32 @@ namespace TabloidMVC.Controllers
             return View();
         }
 
-        // GET: CommentsController/Create
-        public ActionResult Create()
+        // GET: CommentController/Create
+        public ActionResult Create(int id)
         {
-            return View();
+            Post posts = _postRepository.GetPublishedPostById(id);
+
+            PostCommentsViewModel vm = new PostCommentsViewModel()
+            {
+                comment = new Comments(),
+                Post = posts,
+            };
+            vm.comment.PostId = id;
+
+            return View(vm);
         }
 
         // POST: CommentsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Comments Comment, Post Posts)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+
+                Comment.UserProfileId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                Comment.PostId = Posts.Id;
+                _commentsRepository.AddComment(Comment);
+                return RedirectToAction("Index", new { id = Comment.PostId });
+
         }
 
         // GET: CommentsController/Edit/5
@@ -73,7 +91,7 @@ namespace TabloidMVC.Controllers
             try
             {
                 _commentsRepository.Update(comments);
-                return RedirectToAction("Index", "Comments", new { id} );
+                return RedirectToAction("Index", "Comments", new { id });
             }
             catch
             {

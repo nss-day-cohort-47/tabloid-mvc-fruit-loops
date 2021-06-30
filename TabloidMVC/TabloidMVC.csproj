@@ -15,4 +15,8 @@
     <Folder Include="Filters\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Subscription\" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,22 @@
+﻿@model TabloidMVC.Models.UserType
+
+@{
+    ViewData["Title"] = "Warning";
+}
+<div class="container pt-5">
+    
+
+    <div>
+        <h1>Warning you cannot deactivate the only admin!!!</h1>
+        <hr />
+
+    </div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+
+    @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
