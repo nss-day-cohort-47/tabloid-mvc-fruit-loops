@@ -13,7 +13,24 @@ namespace TabloidMVC.Repositories
         public CommentsRepository(IConfiguration config) : base(config) { }
         public void AddComment(Comments comment)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = Connection) {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand()) {
+                    cmd.CommandText = @"
+                        INSERT INTO Comment (postId, userProfileId, subject, content, createdatetime, isDeleted)
+                        OUTPUT Inserted.Id
+                        Values (@postId, @userProfileId, @subject, @content, @date, 0);
+                        ";
+                    cmd.Parameters.AddWithValue("@postId", comment.PostId);
+                    cmd.Parameters.AddWithValue("@userProfileId", comment.UserProfileId);
+                    cmd.Parameters.AddWithValue("@subject", comment.Subject);
+                    cmd.Parameters.AddWithValue("@content", comment.Content);
+                    cmd.Parameters.AddWithValue("@date", DateTime.Now);
+                    comment.Id = (int)cmd.ExecuteScalar();
+                
+                }
+            
+            }
         }
 
         public List<Comments> GetAllComments()
@@ -36,7 +53,7 @@ namespace TabloidMVC.Repositories
                             Content = reader.GetString(reader.GetOrdinal("content")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                             UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
-                            Post = reader.GetInt32(reader.GetOrdinal("PostId")),
+                            PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
                         };
                         comments.Add(comment);
 
@@ -57,7 +74,7 @@ namespace TabloidMVC.Repositories
                 {
                     cmd.CommandText = @"SELECT id, subject, content, CreateDateTime, UserProfileId, PostId, isdeleted
                                         FROM Comment
-                                        WHERE id = @id;";
+                                        WHERE PostId = @id;";
                     cmd.Parameters.AddWithValue("@id", id);
                     SqlDataReader reader = cmd.ExecuteReader();
                     List<Comments> comments = new List<Comments>() { };
@@ -70,7 +87,7 @@ namespace TabloidMVC.Repositories
                             Content = reader.GetString(reader.GetOrdinal("content")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                             UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
-                            Post = reader.GetInt32(reader.GetOrdinal("PostId")),
+                            PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
                         };
                         if (!reader.GetBoolean(reader.GetOrdinal("isDeleted")))
                         {
@@ -108,7 +125,7 @@ namespace TabloidMVC.Repositories
                             Content = reader.GetString(reader.GetOrdinal("content")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                             UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
-                            Post = reader.GetInt32(reader.GetOrdinal("PostId")),
+                            PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
                         };
 
                     }
