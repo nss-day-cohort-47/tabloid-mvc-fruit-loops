@@ -47,7 +47,7 @@ namespace TabloidMVC.Controllers
         // GET: CommentController/Create
         public ActionResult Create(int id)
         {
-            Post posts = _postRepository.GetPublishedPostById(id);
+            Post posts = _postRepository.GetPublishedPostById(id, 1);
 
             PostCommentsViewModel vm = new PostCommentsViewModel()
             {

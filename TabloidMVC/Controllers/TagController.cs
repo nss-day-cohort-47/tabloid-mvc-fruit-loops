@@ -28,7 +28,7 @@ namespace TabloidMVC.Controllers
             Tag vm = _tagRepository.GetTagById(id);
             return View(vm);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             Tag vm = _tagRepository.GetTagById(id);

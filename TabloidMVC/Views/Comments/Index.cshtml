@@ -5,48 +5,60 @@
 }
 
 <div class="container pt-5">
-<h1>Comments</h1>
+    <h1> Comments  (@User.Identities.First().Claims.First().Value) </h1>
 
-<p>
-    <a asp-action="Create" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.comment.Subject)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.comment.Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.comment.CreateDateTime)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Comments)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Subject)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Content)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreateDateTime)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id=item.Id}) |
-                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-<p>
-    <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Back</a>
-</p>
+        @*.GetSpecificClaim("someclaimtype")*@
+
+        <p>
+            <a asp-action="Create" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Create New</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.comment.Subject)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.comment.Content)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.comment.CreateDateTime)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Comments)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Content)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreateDateTime)
+                        </td>
+                        <td>
+                            @if (@User.Identities.First().Claims.First().Value == Model.Comments.First().UserProfileId.ToString())
+                            {
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                                @Html.Raw(" | ")
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            }
+                            @if(@User.IsInRole("Admin"))
+                            {
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                                @Html.Raw(" | ")
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <p>
+            <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Back</a>
+        </p>
 </div>
