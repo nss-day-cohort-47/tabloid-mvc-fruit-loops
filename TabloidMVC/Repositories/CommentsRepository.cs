@@ -25,7 +25,7 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@userProfileId", comment.UserProfileId);
                     cmd.Parameters.AddWithValue("@subject", comment.Subject);
                     cmd.Parameters.AddWithValue("@content", comment.Content);
-                    cmd.Parameters.AddWithValue("@date", comment.CreateDateTime);
+                    cmd.Parameters.AddWithValue("@date", DateTime.Now);
                     comment.Id = (int)cmd.ExecuteScalar();
                 
                 }
