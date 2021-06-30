@@ -29,6 +29,7 @@ namespace TabloidMVC
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<ICommentsRepository, CommentsRepository>();
             services.AddTransient<ITagRepository, TagRepository>();
+            services.AddTransient<ISubscriptionRepository, SubsrciptionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
