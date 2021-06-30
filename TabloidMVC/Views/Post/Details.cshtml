@@ -33,6 +33,9 @@
                 <a asp-controller="Comments" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Comments">
                     Comments
                 </a>
+                <a asp-controller="Subscription" asp-action="Create" asp-route-id="@Model.UserProfileId" class="btn btn-outline-primary mx-2" title="Subscribe">
+                    Subscribe
+                </a>
             </div>
         </section>
         <hr />
