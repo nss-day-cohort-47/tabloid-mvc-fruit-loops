@@ -1,47 +1,58 @@
-﻿@model IEnumerable<TabloidMVC.Models.Comments>
+﻿@model TabloidMVC.Models.ViewModels.PostCommentsViewModel
 
+@{
+    ViewData["Title"] = "Index";
+}
 
-<div>
+<h1>Index</h1>
 
-    <table class="table">
-        <thead>
+<p>
+    <a asp-action="Create" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.comment.PostId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.comment.UserProfileId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.comment.Subject)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.comment.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.comment.CreateDateTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Comments)
+        {
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Subject)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Content)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CreateDateTime)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Subject)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Content)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreateDateTime)
-                    </td>
 
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Edit">
-                            <i class="fas fa-pencil-alt"></i>
-                        </a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Delete">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserProfileId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDateTime)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.Id}) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
