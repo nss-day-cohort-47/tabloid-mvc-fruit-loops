@@ -57,23 +57,46 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: UserProfile/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult UserType(int id)
         {
-            return View();
+            var user = _userProfileRepository.GetById(id);
+            if (user == null)
+            {
+                return NoContent();
+            }
+            return View(user);
         }
 
         // POST: UserProfile/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult UserType(int id, UserProfile user)
         {
-            try
+            var userdata = _userProfileRepository.GetById(id);
+            if (userdata.UserTypeId == 1)
             {
-                return RedirectToAction(nameof(Index));
+
+                try
+                {
+                    _userProfileRepository.MakeAuthor(id);
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    return View(user);
+                }
             }
-            catch
+            else
             {
-                return View();
+                try
+                {
+                    _userProfileRepository.MakeAdmin(id);
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    return View(user);
+                }
             }
         }
 
@@ -109,7 +132,7 @@ namespace TabloidMVC.Controllers
                 }
                 else
                 {
-                    return Content("<script language='javascript' type='text/javascript'>alert('You cannot delete the only admin!');</script>");
+                    return RedirectToAction("Warning");
                 }
             }
             else
@@ -124,6 +147,11 @@ namespace TabloidMVC.Controllers
                     return View(user);
                 }
             }
+        }
+
+        public IActionResult Warning()
+        {
+            return View();
         }
 
         public IActionResult Reactivate(int id)

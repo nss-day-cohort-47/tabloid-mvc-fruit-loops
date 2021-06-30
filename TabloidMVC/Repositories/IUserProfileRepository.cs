@@ -17,5 +17,8 @@ namespace TabloidMVC.Repositories
         public void Reactivate(int id);
 
         public int CheckforAdmin();
+
+        public void MakeAdmin(int id);
+        public void MakeAuthor(int id);
     }
 }
