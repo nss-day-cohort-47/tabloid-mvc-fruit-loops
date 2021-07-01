@@ -20,6 +20,9 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Index()
         {
+            if(User.Identities != null) {
+                return RedirectToAction("SubscribedHome", "Subscription");
+            }
             return View();
         }
 
