@@ -20,5 +20,6 @@ namespace TabloidMVC.Repositories
 
         public void MakeAdmin(int id);
         public void MakeAuthor(int id);
+        public void AddImage(int id, string imagelocation);
     }
 }
