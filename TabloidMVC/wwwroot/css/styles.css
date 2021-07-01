@@ -192,8 +192,15 @@ figure {
 img {
     vertical-align: middle;
     border-style: none;
-    width: 100% !important;
-    height: auto !important;
+    width: 100%;
+   
+}
+
+.userimg {
+    vertical-align: middle;
+    border-style: none;
+    width: 200px;
+
 }
 
 svg {

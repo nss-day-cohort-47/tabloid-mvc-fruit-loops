@@ -50,7 +50,7 @@ namespace TabloidMVC.Repositories
                     cmd.CommandText = @" SELECT  p.Content
 FROM Subscription s  JOIN UserProfile up ON s.ProviderUserProfileId = up.Id 
  JOIN Post p ON p.UserProfileId = up.Id  
-WHERE s.SubscriberUserProfileId = @loggedInUserId";
+WHERE s.SubscriberUserProfileId = @loggedInUserId and p.IsDeleted = 0";
                     cmd.Parameters.AddWithValue("@loggedInUserId", loggedInUserId);
 
 

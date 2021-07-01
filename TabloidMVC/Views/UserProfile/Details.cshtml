@@ -21,11 +21,11 @@
     else
     {
         
-        <img  src="@Url.Content(@Model.ImageLocation)" class="rounded"  alt="Person" />
+        <img  src="@Url.Content(@Model.ImageLocation)" class="rounded userimg"  alt="Person" />
       
     }
-    <a asp-controller="Imagecontroler" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Upload User Photo">
-        Upload User Photo
+    <a asp-controller="Imagecontroler" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Upload Photo">
+        Upload Photo
     </a>
     <dl class="row">
         <dt class="col-sm-2">
@@ -59,7 +59,7 @@
             @Html.DisplayFor(model => model.UserType.Name)
         </dd>
 
-        <a asp-action="Index">Back to List</a>
 
     </dl>
+        <a asp-action="Index">Back to List</a>
 </div>
