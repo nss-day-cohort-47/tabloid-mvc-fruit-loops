@@ -2,36 +2,37 @@
 @{
     ViewData["Title"] = "ManageTags";
 }
+<div class="container pt-5">
+    <h3>Manage Tags</h3>
 
-<h3>Manage Tags</h3>
-
-<p>
-    <b>@Html.ActionLink("Add tags", "AddPostTag", new { postid = @Model.PostId })</b>
-</p>
-<label>@Html.DisplayFor(model => model.Title)</label>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Tags
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @if (@Model.PostTags != null)
-    {
-        @foreach (var tag in @Model.PostTags)
-        {
-        <tr>
-            <td>
-                @tag.Name
-            </td>
-                <td>
-                    @Html.ActionLink("Delete tags", "DeletePostTag", new { tag.Id,@Model.PostId })
-                </td>
+    <p>
+        <b>@Html.ActionLink("Add tags", "AddPostTag", new { postid = @Model.PostId })</b>
+    </p>
+    <label>@Html.DisplayFor(model => model.Title)</label>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Tags
+                </th>
+                <th></th>
             </tr>
-        }
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @if (@Model.PostTags != null)
+            {
+                @foreach (var tag in @Model.PostTags)
+                {
+                    <tr>
+                        <td>
+                            @tag.Name
+                        </td>
+                        <td>
+                            @Html.ActionLink("Delete tags", "DeletePostTag", new { tag.Id, @Model.PostId })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    </div>
