@@ -18,13 +18,15 @@ namespace TabloidMVC.Controllers
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICommentsRepository _commentsRepository;
         private readonly ITagRepository _tagRepository;
+        private readonly ISubscriptionRepository _subscriptionRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentsRepository commentsRepository, ITagRepository tagRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentsRepository commentsRepository, ITagRepository tagRepository, ISubscriptionRepository subscriptionRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
             _commentsRepository = commentsRepository;
             _tagRepository = tagRepository;
+            _subscriptionRepository = subscriptionRepository;
         }
 
         public IActionResult Index()
@@ -42,17 +44,24 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
+            int userId = GetCurrentUserProfileId();
             var post = _postRepository.GetPublishedPostById(id, GetCurrentUserProfileId());
             if (post == null)
             {
-                int userId = GetCurrentUserProfileId();
+
                 post = _postRepository.GetUserPostById(id, userId);
                 if (post == null)
                 {
                     return NotFound();
                 }
             }
-            return View(post);
+
+            PostDetailsSuscribe vm = new PostDetailsSuscribe()
+            {
+                Post = post,
+                IsSubscribed = _subscriptionRepository.CheckForSubscription( userId, post.UserProfileId)
+            };
+            return View(vm);
         }
 
         public ActionResult Delete(int id)
@@ -115,7 +124,7 @@ namespace TabloidMVC.Controllers
             try
             {
                 _tagRepository.AddPostTag(vm.TagId, vm.PostId);
-                return RedirectToAction("ManageTags", new { id = vm.PostId});
+                return RedirectToAction("ManageTags", new { id = vm.PostId });
             }
             catch
             {
@@ -169,7 +178,7 @@ namespace TabloidMVC.Controllers
             {
                 return NoContent();
             }
-                
+
         }
         // POST: OwnerController/Edit/5
         [HttpPost]
