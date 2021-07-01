@@ -36,6 +36,7 @@ SELECT id, name FROM Tag where IsDeleted = 0
 --  [CreateDateTime] datetime NOT NULL,
 --  [ImageLocation] nvarchar(255),
 --  [UserTypeId] integer NOT NULL,
+--  [IsDeleted] bit NOT Null Default(0),
 
 --  CONSTRAINT [FK_User_UserType] FOREIGN KEY ([UserTypeId]) REFERENCES [UserType] ([Id])
 --)
@@ -56,7 +57,8 @@ SELECT id, name FROM Tag where IsDeleted = 0
 
 --CREATE TABLE [Category] (
 --  [Id] integer PRIMARY KEY IDENTITY,
---  [Name] nvarchar(50) NOT NULL
+--  [Name] nvarchar(50) NOT NULL,
+--  [IsDeleted] bit NOT Null Default(0)
 --)
 
 --CREATE TABLE [Post] (
@@ -69,7 +71,7 @@ SELECT id, name FROM Tag where IsDeleted = 0
 --  [IsApproved] bit NOT NULL,
 --  [CategoryId] integer NOT NULL,
 --  [UserProfileId] integer NOT NULL,
-
+--  [IsDeleted] bit NOT Null Default(0),
 --  CONSTRAINT [FK_Post_Category] FOREIGN KEY ([CategoryId]) REFERENCES [Category] ([Id]),
 --  CONSTRAINT [FK_Post_UserProfile] FOREIGN KEY ([UserProfileId]) REFERENCES [UserProfile] ([Id])
 --)
@@ -81,13 +83,14 @@ SELECT id, name FROM Tag where IsDeleted = 0
 --  [Subject] nvarchar(255) NOT NULL,
 --  [Content] text NOT NULL,
 --  [CreateDateTime] datetime NOT NULL,
-
+--  [IsDeleted] bit NOT Null Default(0),
 --  CONSTRAINT [FK_Comment_Post] FOREIGN KEY ([PostId]) REFERENCES [Post] ([Id]),
 --  CONSTRAINT [FK_Comment_UserProfile] FOREIGN KEY ([UserProfileId]) REFERENCES [UserProfile] ([Id])
 --)
 
 --CREATE TABLE [Tag] (
 --  [Id] integer PRIMARY KEY IDENTITY,
+--  [IsDeleted] bit NOT Null Default(0),
 --  [Name] nvarchar(50) NOT NULL
 --)
 
