@@ -48,7 +48,7 @@ namespace TabloidMVC.Controllers
         public ActionResult Create(int id)
         {
 
-            Post posts = _postRepository.GetPublishedPostById(id, 1);
+            Post posts = _postRepository.GetPublishedPostById(id, GetCurrentUserProfileId());
 
 
             PostCommentsViewModel vm = new PostCommentsViewModel()
@@ -130,6 +130,11 @@ namespace TabloidMVC.Controllers
         }
 
         private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
+        }
+         private int GetCurrentUserProfileId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(id);
