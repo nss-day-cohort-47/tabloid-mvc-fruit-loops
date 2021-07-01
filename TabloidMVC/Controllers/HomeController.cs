@@ -20,10 +20,7 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Index()
         {
-            if(User.Identities != null) {
-                return RedirectToAction("SubscribedHome", "Subscription");
-            }
-            return View();
+            return User.Identities.First().Claims.Count() != 0 ? RedirectToAction("SubscribedHome", "Subscription") : View();
         }
 
         public IActionResult Privacy()
