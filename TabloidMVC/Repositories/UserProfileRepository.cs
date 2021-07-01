@@ -276,5 +276,20 @@ namespace TabloidMVC.Repositories
                 
             }
         }
+
+        public void AddImage(int id, string imagelocation)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "Update UserProfile set ImageLocation = @imagelocation where id = @id";
+                    cmd.Parameters.AddWithValue("@imagelocation", imagelocation);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

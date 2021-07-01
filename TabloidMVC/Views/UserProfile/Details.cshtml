@@ -9,19 +9,24 @@
 <div class="container pt-5">
     <h1>Details</h1>
     <hr />
-        <div class="row justify-content-between">
-            <h1 class="text-black-50">@Model.FullName</h1>
-        </div>
-        @if (String.IsNullOrEmpty(Model.ImageLocation))
-        {
-            <img src="https://images.all-free-download.com/images/graphiclarge/man_silhouette_clip_art_9510.jpg"
-                 class="rounded mx-auto d-block"
-                 alt="Person" />
-        }
-        else
-        {
-            <img src="@Model.ImageLocation" class="rounded mx-auto d-block" alt="Person" />
-        }
+    <div class="row justify-content-between">
+        <h1 class="text-black-50">@Model.FullName</h1>
+    </div>
+    @if (String.IsNullOrEmpty(Model.ImageLocation))
+    {
+        <img src="https://images.all-free-download.com/images/graphiclarge/man_silhouette_clip_art_9510.jpg"
+             class="rounded mx-auto d-block"
+             alt="Person" />
+    }
+    else
+    {
+        
+        <img  src="@Url.Content(@Model.ImageLocation)" class="rounded"  alt="Person" />
+      
+    }
+    <a asp-controller="Imagecontroler" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Upload User Photo">
+        Upload User Photo
+    </a>
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DisplayName)
@@ -42,19 +47,19 @@
             @Html.DisplayFor(model => model.CreateDateTime)
         </dd>
         @*<dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageLocation)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImageLocation)
-        </dd>*@
+                @Html.DisplayNameFor(model => model.ImageLocation)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ImageLocation)
+            </dd>*@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UserTypeId)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UserType.Name)
         </dd>
-        
-            <a asp-action="Index">Back to List</a>
-        
+
+        <a asp-action="Index">Back to List</a>
+
     </dl>
 </div>
