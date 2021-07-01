@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
 {
+    [Authorize]
     public class CommentsController : Controller
     {
         // GET: CommentsController
@@ -74,11 +76,16 @@ namespace TabloidMVC.Controllers
         public ActionResult Edit(int id)
         {
             Comments comments = _commentsRepository.GetCommentById(id);
+            
             if (comments == null)
             {
                 return NotFound();
             }
-            return View(comments);
+            if (GetCurrentUserProfileId() == comments.UserProfileId || User.IsInRole("Admin"))
+            {
+                return View(comments);
+            }
+            return NotFound();
         }
 
         // POST: CommentsController/Edit/5
@@ -118,6 +125,12 @@ namespace TabloidMVC.Controllers
             {
                 return View(comments);
             }
+        }
+
+        private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }

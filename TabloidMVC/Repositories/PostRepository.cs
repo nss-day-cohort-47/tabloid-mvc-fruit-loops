@@ -153,7 +153,6 @@ namespace TabloidMVC.Repositories
                     var reader = cmd.ExecuteReader();
                     List<PostManageTagsViewModel> retValue = new();
                     PostManageTagsViewModel post = null;
-                    Tag tag = null;
                     if (reader.Read())
                     {
                         if(post == null)

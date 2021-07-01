@@ -59,7 +59,8 @@ namespace TabloidMVC.Controllers
         {
             int userId = GetCurrentUserProfileId();
             var post = _postRepository.GetPublishedPostById(id, GetCurrentUserProfileId());
-            if (userId == post.UserProfileId)
+
+            if (userId == post.UserProfileId || User.IsInRole("Admin"))
             {
                 return View(post);
             }
@@ -160,7 +161,15 @@ namespace TabloidMVC.Controllers
             var vm = new PostCreateViewModel();
             vm.Post = post;
             vm.CategoryOptions = _categoryRepository.GetAllCategories();
-            return View(vm);
+            if (GetCurrentUserProfileId() == post.UserProfileId || User.IsInRole("Admin"))
+            {
+                return View(vm);
+            }
+            else
+            {
+                return NoContent();
+            }
+                
         }
         // POST: OwnerController/Edit/5
         [HttpPost]

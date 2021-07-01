@@ -17,6 +17,7 @@ namespace TabloidMVC.Controllers
         {
             _tagRepository = tagRepository;
         }
+        [Authorize(Roles = "Admin") ]
         public IActionResult Index()
         {
             List<Tag> tags = _tagRepository.GetAll();
@@ -27,7 +28,7 @@ namespace TabloidMVC.Controllers
             Tag vm = _tagRepository.GetTagById(id);
             return View(vm);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             Tag vm = _tagRepository.GetTagById(id);
