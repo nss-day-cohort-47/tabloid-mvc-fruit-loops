@@ -38,7 +38,60 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        public void RemoveSubscription(int subscriber, int poster)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
 
+               
+                // public DateTime BeginDateTime { get; set; }
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        Delete from Subscription where SubscriberUserProfileId = @SubscriberUserProfileId and 
+                          ProviderUserProfileId = @ProviderUserProfileId";
+                    cmd.Parameters.AddWithValue("@SubscriberUserProfileId", subscriber);
+                    cmd.Parameters.AddWithValue("@ProviderUserProfileId", poster);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public bool CheckForSubscription(int subscriber, int poster)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+
+                DateTime startDateTime = DateTime.Now;
+                // public DateTime BeginDateTime { get; set; }
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"select count(id) as count from Subscription        
+                                        where SubscriberUserProfileId = @SubscriberUserProfileId 
+                                        and ProviderUserProfileId = @ProviderUserProfileId; ";
+                    cmd.Parameters.AddWithValue("@SubscriberUserProfileId", subscriber);
+                    cmd.Parameters.AddWithValue("@ProviderUserProfileId", poster);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    int count = 0;
+                    
+                    while (reader.Read())
+                    {
+                        count = reader.GetInt32(reader.GetOrdinal("count"));
+                    }
+
+                    if (count >0 )
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
 
         public List<Post> GetAllSubscribersPostsByUserId(int loggedInUserId)
         {

@@ -1,54 +1,63 @@
-﻿@model TabloidMVC.Models.Post
+﻿@model TabloidMVC.Models.ViewModels.PostDetailsSuscribe
 
 @{
-    ViewData["Title"] = $"Post - {Model.Title}";
+    ViewData["Title"] = $"Post - {Model.Post.Title}";
 }
 
 <div class="container pt-5">
     <div class="post">
         <section class="px-3">
             <div class="row justify-content-between">
-                <h1 class="text-secondary">@Model.Title</h1>
-                <h1 class="text-black-50">@Model.Category.Name</h1>
+                <h1 class="text-secondary">@Model.Post.Title</h1>
+                <h1 class="text-black-50">@Model.Post.Category.Name</h1>
             </div>
             <div class="row justify-content-between">
-                <p class="text-secondary">Written by @Model.UserProfile.DisplayName</p>
-                <p class="text-black-50">Published on @Html.DisplayFor(model => model.PublishDateTime)</p>
+                <p class="text-secondary">Written by @Model.Post.UserProfile.DisplayName</p>
+                <p class="text-black-50">Published on @Html.DisplayFor(model => model.Post.PublishDateTime)</p>
             </div>
             <div class="row">
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Edit">
+                <a asp-action="Edit" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Edit">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
-                @if (Model.isOwner)
+                @if (Model.Post.isOwner)
                 {
-                    <a asp-action="ManageTags" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Manage Tags">
+                    <a asp-action="ManageTags" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Manage Tags">
                         <i class="fas fa-tag"></i>
                     </a>
                 }
 
-                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Delete">
+                <a asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fas fa-trash"></i>
                 </a>
                 @* word before controller. *@
-                <a asp-controller="Comments" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Comments">
+                <a asp-controller="Comments" asp-action="Index" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Comments">
                     Comments
                 </a>
-                <a asp-controller="Subscription" asp-action="Create" asp-route-id="@Model.UserProfileId" class="btn btn-outline-primary mx-2" title="Subscribe">
-                    Subscribe
-                </a>
+                @if (Model.IsSubscribed)
+                {
+                    <a asp-controller="Subscription" asp-action="Delete" asp-route-id="@Model.Post.UserProfileId" class="btn btn-outline-primary mx-2" title="Subscribe">
+                        Unsubscribe
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Subscription" asp-action="Create" asp-route-id="@Model.Post.UserProfileId" class="btn btn-outline-primary mx-2" title="Subscribe">
+                        Subscribe
+                    </a>
+                }
             </div>
         </section>
         <hr />
-        @if (!string.IsNullOrWhiteSpace(Model.ImageLocation))
+        @if (!string.IsNullOrWhiteSpace(Model.Post.ImageLocation))
         {
             <section class="row justify-content-center">
                 <div>
-                    <img src="@Model.ImageLocation" />
+                    <img src="@Model.Post.ImageLocation" />
                 </div>
             </section>
         }
         <section class="row post__content">
-            <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Content)</p>
+            <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Post.Content)</p>
         </section>
 
     </div>

@@ -47,6 +47,13 @@ namespace TabloidMVC.Controllers
             return RedirectToAction("Details", "Post", new { id = Id });
         }
 
+        public ActionResult Delete(int Id)
+        {
+            int loggedInUserId = GetCurrentUserProfileId();
+            _subscriptionRepository.RemoveSubscription(loggedInUserId, Id);
+            return RedirectToAction("Details", "Post", new { id = Id });
+        }
+
         // POST: SubscriptionController1/Create
         //[HttpPost]
         //[ValidateAntiForgeryToken]
@@ -87,25 +94,10 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: SubscriptionController1/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+       
 
         // POST: SubscriptionController1/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
 
         private int GetCurrentUserProfileId()
         {
