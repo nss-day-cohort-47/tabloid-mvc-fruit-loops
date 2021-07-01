@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Filters\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Views\Subscription\" />
   </ItemGroup>
 

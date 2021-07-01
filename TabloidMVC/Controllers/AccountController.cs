@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -9,6 +10,7 @@ using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
 {
+
     public class AccountController : Controller
     {
         private readonly IUserProfileRepository _userProfileRepository;
@@ -64,6 +66,7 @@ namespace TabloidMVC.Controllers
             {
                 new Claim(ClaimTypes.NameIdentifier, userProfile.Id.ToString()),
                 new Claim(ClaimTypes.Email, userProfile.Email),
+                new Claim(ClaimTypes.Role, userProfile.UserType.Name)
             };
 
             var claimsIdentity = new ClaimsIdentity(
