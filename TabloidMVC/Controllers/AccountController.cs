@@ -43,7 +43,7 @@ namespace TabloidMVC.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("SubscribedHome", "Subscription");
         }
         public IActionResult Login()
         {
@@ -76,7 +76,7 @@ namespace TabloidMVC.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("SubscribedHome", "Subscription");
         }
 
        

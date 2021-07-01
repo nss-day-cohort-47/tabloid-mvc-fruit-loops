@@ -9,5 +9,7 @@ namespace TabloidMVC.Repositories
     public interface ISubscriptionRepository
     {
         void AddSubscription(int subscriber, int poster);
+
+        List<Post> GetAllSubscribersPostsByUserId(int loggedInUserId);
     }
 }

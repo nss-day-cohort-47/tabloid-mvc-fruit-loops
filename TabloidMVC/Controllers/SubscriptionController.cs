@@ -26,9 +26,11 @@ namespace TabloidMVC.Controllers
 
 
         // GET: SubscriptionController1
-        public ActionResult Index()
+        public ActionResult SubscribedHome()
         {
-            return View();
+            int loggedInUserId = GetCurrentUserProfileId();
+            var vm =_subscriptionRepository.GetAllSubscribersPostsByUserId(loggedInUserId);
+            return View(vm);
         }
 
         // GET: SubscriptionController1/Details/5
@@ -108,7 +110,11 @@ namespace TabloidMVC.Controllers
         private int GetCurrentUserProfileId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return int.Parse(id);
+            if(id != null)
+            {
+                return int.Parse(id);
+            }
+            return 0;
         }
 
     }
