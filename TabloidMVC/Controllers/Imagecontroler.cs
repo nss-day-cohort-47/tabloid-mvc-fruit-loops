@@ -48,11 +48,11 @@ namespace TabloidMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ImageViewModel imageModel)
         {
-            if (ModelState.IsValid)
+             if (ModelState.IsValid)
             {
                 
                 //Save image to wwwroot/image
-                string wwwRootPath = @"C:\Users\frank\workspace\csharp\tabloid-mvc-fruit-loops\TabloidMVC\wwwroot\uploads\";
+                string wwwRootPath = @"wwwroot/uploads/";
                 string fileName = Path.GetFileNameWithoutExtension(imageModel.Image.ImageFile.FileName);
                 string extension = Path.GetExtension(imageModel.Image.ImageFile.FileName);
                 imageModel.Image.ImageName = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
@@ -66,6 +66,8 @@ namespace TabloidMVC.Controllers
                 _userRepo.AddImage(imageModel.Loggedinuser, rootpath);
                 return RedirectToAction( "Index", "UserProfile");
             }
+
+            return View(imageModel);
 
             return View(imageModel);
         }
