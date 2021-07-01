@@ -1,0 +1,46 @@
+﻿@model IEnumerable<TabloidMVC.Models.Post>
+
+@{
+    ViewData["Title"] = "SubscribedHome";
+}
+<div class="container pt-5">
+
+    <header class="masthead bg-primary text-white text-center">
+        <div class="container d-flex align-items-center flex-column">
+            <img class="masthead-avatar mb-2" src="~/assets/logo_transparent.png" alt="">
+            <div class="divider-custom divider-light">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <h2 class="pre-wrap masthead-subheading font-weight-light mb-0">BLOGS & JOURNALS</h2>
+        </div>
+    </header>
+
+    <h1>Welcome to the Home page of Tabloid!</h1>
+
+    <h2>Subscribed Posts:</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.Content)
+                    </th>*@
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Content)
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
